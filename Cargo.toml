@@ -7,3 +7,4 @@ edition = "2021"
 
 [dependencies]
 dateparser = "0.2.1"
+regex = "1.10.5"
