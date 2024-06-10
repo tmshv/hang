@@ -5,15 +5,15 @@ The **hang** is designed to make your system hang or pause for a specified durat
 ## Usage
 - To hang for a duration, execute:
   ```
-  $ ./hang <duration>
+  $ hang <duration>
   ```
-  Example: `$ ./hang 5s`
+  Example: `$ hang 5s`
 
 - To hang until a specific time, use:
   ```
-  $ ./hang <HH:MM:SS>
+  $ hang <HH:MM:SS>
   ```
-  Example: `$ ./hang 10:20:30`
+  Example: `$ hang 10:20:30`
 
 - If no arguments are provided, the program will hang for 1 second.
 
