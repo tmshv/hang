@@ -176,10 +176,7 @@ mod tests {
 
     #[test]
     fn test_parse_time_invalid_input() {
-        assert_eq!(
-            parse_time("not a date"),
-            Err("Failed to parse".to_string())
-        );
+        assert_eq!(parse_time("not a date"), Err("Failed to parse".to_string()));
         assert_eq!(parse_time(""), Err("Failed to parse".to_string()));
     }
 
