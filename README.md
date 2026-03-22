@@ -25,3 +25,5 @@ The **hang** is designed to make your system hang or pause for a specified durat
   - `m` for minutes
   - `h` for hours
 
+Also look at:
+- https://rednafi.com/misc/fixed_time_task_scheduling_with_at/
