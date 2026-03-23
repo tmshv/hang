@@ -2,6 +2,12 @@
 
 The **hang** is designed to make your system hang or pause for a specified duration or until a specific time.
 
+## Install
+
+```
+cargo install --git https://github.com/tmshv/hang --tag v0.2.0
+```
+
 ## Usage
 - To hang for a duration, execute:
   ```
