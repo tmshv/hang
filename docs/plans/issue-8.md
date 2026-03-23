@@ -27,7 +27,7 @@
 - Create: `src/duration.rs`
 - Modify: `src/main.rs`
 
-- [ ] **Step 1: Create `src/duration.rs`** — move `DurationError`, `parse_duration`, and all `parse_duration` tests verbatim from `main.rs`.
+- [x] **Step 1: Create `src/duration.rs`** — move `DurationError`, `parse_duration`, and all `parse_duration` tests verbatim from `main.rs`.
 
 ```rust
 // src/duration.rs
@@ -65,7 +65,7 @@ mod tests {
 }
 ```
 
-- [ ] **Step 2: Create `src/time.rs`** — move `parse_time` and all `parse_time` tests verbatim.
+- [x] **Step 2: Create `src/time.rs`** — move `parse_time` and all `parse_time` tests verbatim.
 
 ```rust
 // src/time.rs
@@ -97,7 +97,7 @@ mod tests {
 }
 ```
 
-- [ ] **Step 3: Update `src/main.rs`** — declare modules, remove moved code, keep `parse_args` and `main`.
+- [x] **Step 3: Update `src/main.rs`** — declare modules, remove moved code, keep `parse_args` and `main`.
 
 ```rust
 // src/main.rs
@@ -119,14 +119,14 @@ fn main() {
 }
 ```
 
-- [ ] **Step 4: Run tests**
+- [x] **Step 4: Run tests**
 
 ```bash
 cargo test --verbose
 ```
 Expected: all existing tests pass.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/duration.rs src/time.rs src/main.rs
