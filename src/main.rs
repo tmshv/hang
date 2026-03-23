@@ -7,10 +7,10 @@ use time::parse_time;
 
 fn is_time_format(s: &str) -> bool {
     let parts: Vec<&str> = s.split(':').collect();
-    parts.len() == 3
+    (parts.len() == 2 || parts.len() == 3)
         && parts
             .iter()
-            .all(|p| p.len() == 2 && p.chars().all(|c| c.is_ascii_digit()))
+            .all(|p| matches!(p.as_bytes(), [b'0'..=b'9', b'0'..=b'9']))
 }
 
 fn parse_args() -> Result<Duration, String> {
@@ -22,10 +22,40 @@ fn parse_args() -> Result<Duration, String> {
 
     let input = &args[1];
     if is_time_format(input) {
-        return parse_time(input);
+        let normalized = if input.len() == 5 {
+            format!("{}:00", input)
+        } else {
+            input.clone()
+        };
+        return parse_time(&normalized);
     }
 
     parse_duration(input).map_err(|_| format!("invalid duration: '{}'", input))
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_is_time_format_hh_mm_ss() {
+        assert!(is_time_format("23:43:00"));
+        assert!(is_time_format("00:00:00"));
+    }
+
+    #[test]
+    fn test_is_time_format_hh_mm() {
+        assert!(is_time_format("23:43"));
+        assert!(is_time_format("00:00"));
+    }
+
+    #[test]
+    fn test_is_time_format_invalid() {
+        assert!(!is_time_format("23:4"));
+        assert!(!is_time_format("2:43"));
+        assert!(!is_time_format("5s"));
+        assert!(!is_time_format("23:43:0"));
+    }
 }
 
 fn main() {
