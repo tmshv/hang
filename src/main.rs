@@ -5,33 +5,27 @@ use duration::parse_duration;
 use time::parse_time;
 use std::time::Duration;
 
-fn parse_args() -> Duration {
+fn parse_args() -> Result<Duration, String> {
     let args: Vec<String> = std::env::args().collect();
 
     if args.len() < 2 {
-        return Duration::from_secs(1); // Sleep for 1 second if no arguments passed
+        return Ok(Duration::from_secs(1));
     }
 
     let input = &args[1];
-    if input.contains(":") {
-        return parse_time(input).unwrap_or(Duration::from_nanos(0));
+    if input.contains(':') {
+        return parse_time(input);
     }
 
-    match parse_duration(input) {
-        Ok(dur) => dur,
-        Err(_) => Duration::from_nanos(0),
-    }
+    parse_duration(input).map_err(|_| format!("invalid duration: '{}'", input))
 }
 
 fn main() {
-    // Parse duration value from cli args
-    let dur = parse_args();
-
-    // print!("duration {:?}", dur);
-
-    // Sleep for the specified number of seconds
-    std::thread::sleep(dur);
-
-    // Exit the program
-    std::process::exit(0);
+    match parse_args() {
+        Ok(dur) => std::thread::sleep(dur),
+        Err(msg) => {
+            eprintln!("hang: {}", msg);
+            std::process::exit(1);
+        }
+    }
 }

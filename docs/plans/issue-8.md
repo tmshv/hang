@@ -249,7 +249,7 @@ git commit -m "perf: compile duration regex once via OnceLock"
 
 Currently `parse_args()` returns `Duration` and swallows all errors by returning zero duration. `hang badinput` exits 0 silently — this breaks scripts. Fix: return `Result`, print errors to stderr, exit 1.
 
-- [ ] **Step 1: Change `parse_args` signature and body in `src/main.rs`**
+- [x] **Step 1: Change `parse_args` signature and body in `src/main.rs`**
 
 ```rust
 fn parse_args() -> Result<Duration, String> {
@@ -268,7 +268,7 @@ fn parse_args() -> Result<Duration, String> {
 }
 ```
 
-- [ ] **Step 2: Update `main` to handle the Result**
+- [x] **Step 2: Update `main` to handle the Result**
 
 ```rust
 fn main() {
@@ -282,14 +282,14 @@ fn main() {
 }
 ```
 
-- [ ] **Step 3: Run all tests**
+- [x] **Step 3: Run all tests**
 
 ```bash
 cargo test --verbose
 ```
 Expected: all pass (existing tests target `parse_duration`/`parse_time` directly, not `parse_args`).
 
-- [ ] **Step 4: Manual smoke test**
+- [x] **Step 4: Manual smoke test**
 
 ```bash
 cargo build
@@ -302,7 +302,7 @@ Expected: prints `hang: invalid duration: 'badinput'` to stderr, exits 1.
 ```
 Expected: sleeps 1s, exits 0.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/main.rs
