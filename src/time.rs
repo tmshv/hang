@@ -10,10 +10,17 @@ pub fn parse_time(input: &str) -> Result<Duration, String> {
     let target_dt = match Local.from_local_datetime(&target_naive) {
         chrono::LocalResult::Single(dt) => dt,
         chrono::LocalResult::Ambiguous(dt1, dt2) => {
-            if dt1 > now { dt1 } else { dt2 }
+            if dt1 > now {
+                dt1
+            } else {
+                dt2
+            }
         }
         chrono::LocalResult::None => {
-            return Err(format!("invalid time: '{}' does not exist in local time (DST gap)", input))
+            return Err(format!(
+                "invalid time: '{}' does not exist in local time (DST gap)",
+                input
+            ))
         }
     };
 
@@ -39,10 +46,22 @@ mod tests {
 
     #[test]
     fn test_parse_time_invalid_hms() {
-        assert_eq!(parse_time("25:00:00"), Err("invalid time: '25:00:00'".to_string()));
-        assert_eq!(parse_time("12:60:00"), Err("invalid time: '12:60:00'".to_string()));
-        assert_eq!(parse_time("12:00:61"), Err("invalid time: '12:00:61'".to_string()));
-        assert_eq!(parse_time("notadate"), Err("invalid time: 'notadate'".to_string()));
+        assert_eq!(
+            parse_time("25:00:00"),
+            Err("invalid time: '25:00:00'".to_string())
+        );
+        assert_eq!(
+            parse_time("12:60:00"),
+            Err("invalid time: '12:60:00'".to_string())
+        );
+        assert_eq!(
+            parse_time("12:00:61"),
+            Err("invalid time: '12:00:61'".to_string())
+        );
+        assert_eq!(
+            parse_time("notadate"),
+            Err("invalid time: 'notadate'".to_string())
+        );
     }
 
     #[test]
@@ -53,8 +72,14 @@ mod tests {
 
     #[test]
     fn test_parse_time_invalid_input() {
-        assert_eq!(parse_time("not a date"), Err("invalid time: 'not a date'".to_string()));
+        assert_eq!(
+            parse_time("not a date"),
+            Err("invalid time: 'not a date'".to_string())
+        );
         assert_eq!(parse_time(""), Err("invalid time: ''".to_string()));
-        assert_eq!(parse_time("2022-01-01T00:00:00Z"), Err("invalid time: '2022-01-01T00:00:00Z'".to_string()));
+        assert_eq!(
+            parse_time("2022-01-01T00:00:00Z"),
+            Err("invalid time: '2022-01-01T00:00:00Z'".to_string())
+        );
     }
 }

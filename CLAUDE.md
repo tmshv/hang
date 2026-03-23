@@ -30,6 +30,15 @@ Three-module Rust binary:
 - `regex` — Duration string pattern matching
 - `chrono` — Time parsing and local clock access for `HH:MM:SS` target-time calculation
 
+## Code Quality
+
+Always verify formatting and lints before committing:
+
+```bash
+cargo fmt --check   # Verify formatting (run cargo fmt to fix)
+cargo clippy        # Check for lints
+```
+
 ## CI
 
 GitHub Actions workflow (`.github/workflows/rust.yml`) runs `cargo build` and `cargo test` on pushes and PRs to `master`.
