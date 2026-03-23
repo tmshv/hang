@@ -1,21 +1,26 @@
-use chrono::{Local, NaiveTime, Timelike};
+use chrono::{Local, NaiveTime, TimeZone};
 use std::time::Duration;
 
 pub fn parse_time(input: &str) -> Result<Duration, String> {
-    let target = NaiveTime::parse_from_str(input, "%H:%M:%S")
+    let target_time = NaiveTime::parse_from_str(input, "%H:%M:%S")
         .map_err(|_| format!("invalid time: '{}'", input))?;
 
-    let now = Local::now().time();
-    let target_ns = target.num_seconds_from_midnight() as i64 * 1_000_000_000
-        + target.nanosecond() as i64;
-    let now_ns = now.num_seconds_from_midnight() as i64 * 1_000_000_000
-        + now.nanosecond() as i64;
-    let delta_ns = target_ns - now_ns;
+    let now = Local::now();
+    let target_naive = now.date_naive().and_time(target_time);
+    let target_dt = match Local.from_local_datetime(&target_naive) {
+        chrono::LocalResult::Single(dt) => dt,
+        chrono::LocalResult::Ambiguous(dt1, dt2) => {
+            if dt1 > now { dt1 } else { dt2 }
+        }
+        chrono::LocalResult::None => {
+            return Err(format!("invalid time: '{}' does not exist in local time (DST gap)", input))
+        }
+    };
 
-    if delta_ns > 0 {
-        Ok(Duration::from_nanos(delta_ns as u64))
-    } else {
-        Ok(Duration::from_secs(0))
+    let delta = target_dt.signed_duration_since(now);
+    match delta.num_nanoseconds() {
+        Some(ns) if ns > 0 => Ok(Duration::from_nanos(ns as u64)),
+        _ => Ok(Duration::from_secs(0)),
     }
 }
 
