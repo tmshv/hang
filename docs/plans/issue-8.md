@@ -317,7 +317,7 @@ git commit -m "fix: propagate parse errors to stderr and exit 1 on bad input"
 - Modify: `src/main.rs`
 - Modify: `src/duration.rs`
 
-- [ ] **Step 1: Remove commented-out lines**
+- [x] **Step 1: Remove commented-out lines**
 
 In `src/duration.rs` (was `main.rs`), delete:
 ```rust
@@ -329,14 +329,14 @@ In `src/main.rs`, delete:
 // print!("duration {:?}", dur);
 ```
 
-- [ ] **Step 2: Run tests and clippy**
+- [x] **Step 2: Run tests and clippy**
 
 ```bash
 cargo clippy -- -D warnings && cargo test
 ```
 Expected: no warnings, all tests pass.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add src/main.rs src/duration.rs

@@ -25,7 +25,6 @@ pub fn parse_duration(s: &str) -> Result<Duration, DurationError> {
                 "m" => Duration::from_secs(num * 60),
                 "h" => Duration::from_secs(num * 3600),
                 _ => Duration::from_millis(num),
-                // _ => return Err(DurationError),
             };
             Ok(duration)
         }
