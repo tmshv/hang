@@ -24,6 +24,11 @@ The **hang** is designed to make your system hang or pause for a specified durat
   - `s` for seconds
   - `m` for minutes
   - `h` for hours
+  - A bare integer with no unit suffix is treated as milliseconds (e.g., `hang 500` sleeps 500 ms)
+
+## Exit Codes
+- `0` — Success (slept the requested duration)
+- `1` — Invalid argument (error message printed to stderr)
 
 Also look at:
 - https://rednafi.com/misc/fixed_time_task_scheduling_with_at/
