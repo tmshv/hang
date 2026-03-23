@@ -5,7 +5,7 @@ The **hang** is designed to make your system hang or pause for a specified durat
 ## Install
 
 ```
-cargo install --git https://github.com/tmshv/hang --tag v0.2.0
+cargo install --git https://github.com/tmshv/hang --tag v0.3.0
 ```
 
 ## Usage
