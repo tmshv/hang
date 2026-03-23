@@ -1,11 +1,18 @@
 use regex::Regex;
+use std::sync::OnceLock;
 use std::time::Duration;
+
+static DURATION_RE: OnceLock<Regex> = OnceLock::new();
+
+fn duration_regex() -> &'static Regex {
+    DURATION_RE.get_or_init(|| Regex::new(r"^(\d+)(ns|ms|s|m|h)?$").unwrap())
+}
 
 #[derive(Debug, PartialEq)]
 pub struct DurationError;
 
 pub fn parse_duration(s: &str) -> Result<Duration, DurationError> {
-    let re = Regex::new(r"^(\d+)(ns|ms|s|m|h)?$").unwrap();
+    let re = duration_regex();
     match re.captures(s) {
         Some(caps) => {
             let value = caps.get(1).map_or("", |m| m.as_str());

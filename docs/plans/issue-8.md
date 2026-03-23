@@ -202,7 +202,7 @@ git commit -m "fix: add ^ anchor to duration regex and support ns unit"
 
 Currently the regex is compiled on every `parse_duration` call. Use `std::sync::OnceLock` (stable since Rust 1.70, no new dependencies).
 
-- [ ] **Step 1: Replace inline `Regex::new` with a static**
+- [x] **Step 1: Replace inline `Regex::new` with a static**
 
 ```rust
 // src/duration.rs
@@ -226,14 +226,14 @@ pub fn parse_duration(s: &str) -> Result<Duration, DurationError> {
 }
 ```
 
-- [ ] **Step 2: Run all tests**
+- [x] **Step 2: Run all tests**
 
 ```bash
 cargo test --verbose
 ```
 Expected: all pass.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add src/duration.rs
