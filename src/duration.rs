@@ -16,14 +16,14 @@ pub fn parse_duration(s: &str) -> Result<Duration, DurationError> {
     match re.captures(s) {
         Some(caps) => {
             let value = caps.get(1).map_or("", |m| m.as_str());
-            let num = value.parse::<u64>().unwrap();
+            let num = value.parse::<u64>().map_err(|_| DurationError)?;
             let unit = &caps.get(2).map_or("", |m| m.as_str()).to_lowercase();
             let duration = match unit.as_str() {
                 "ns" => Duration::from_nanos(num),
                 "ms" => Duration::from_millis(num),
                 "s" => Duration::from_secs(num),
-                "m" => Duration::from_secs(num * 60),
-                "h" => Duration::from_secs(num * 3600),
+                "m" => Duration::from_secs(num.checked_mul(60).ok_or(DurationError)?),
+                "h" => Duration::from_secs(num.checked_mul(3600).ok_or(DurationError)?),
                 _ => Duration::from_millis(num),
             };
             Ok(duration)
@@ -100,5 +100,14 @@ mod tests {
             parse_duration("1000000ms"),
             Ok(Duration::from_millis(1_000_000))
         );
+    }
+
+    #[test]
+    fn test_parse_duration_overflow_rejects() {
+        // 21-digit string exceeds u64::MAX — parse::<u64> fails, must return Err not panic
+        assert_eq!(parse_duration("99999999999999999999s"), Err(DurationError));
+        // Multiplication overflow: u64::MAX / 30 * 60 overflows for "m"
+        assert_eq!(parse_duration("18446744073709551615m"), Err(DurationError));
+        assert_eq!(parse_duration("18446744073709551615h"), Err(DurationError));
     }
 }

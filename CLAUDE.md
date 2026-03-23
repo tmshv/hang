@@ -19,16 +19,16 @@ cargo test <test_name>   # Run a single test by name
 
 ## Architecture
 
-Single-file Rust binary (`src/main.rs`) with three parsing paths:
+Three-module Rust binary:
 
-1. **`parse_duration(s)`** — Regex-based parser for short duration syntax (`5s`, `100ms`, `2h`, `10m`). Bare numbers without a unit suffix are treated as milliseconds.
-2. **`parse_time(input)`** — Uses the `dateparser` crate to parse absolute timestamps, then computes the delta from now. Past times resolve to zero duration.
-3. **`parse_args()`** — Entry point for argument handling. Routes to `parse_time` if the input contains `:`, otherwise to `parse_duration`.
+1. **`src/duration.rs`** — `parse_duration(s)` — Regex-based parser for short duration syntax (`5s`, `100ms`, `2h`, `10m`, `100ns`). Bare numbers without a unit suffix are treated as milliseconds. Regex is compiled once via `OnceLock`.
+2. **`src/time.rs`** — `parse_time(input)` — Parses `HH:MM:SS` using `chrono::NaiveTime::parse_from_str`. Computes subsecond-accurate delta from now; past times resolve to zero.
+3. **`src/main.rs`** — `parse_args()` routes to `parse_time` if input is exactly three colon-separated all-digit non-empty segments (e.g. `10:20:30`), otherwise to `parse_duration`. Errors are printed to stderr and exit with code 1.
 
 ## Dependencies
 
 - `regex` — Duration string pattern matching
-- `dateparser` — Flexible date/time string parsing
+- `chrono` — Time parsing and local clock access for `HH:MM:SS` target-time calculation
 
 ## CI
 
