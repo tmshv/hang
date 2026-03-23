@@ -144,7 +144,7 @@ The regex `(\d+)(ms|s|m|h)?$` has two bugs:
 1. No `^` anchor — `abc123s` matches and sleeps 123s silently.
 2. `ns` is in the match arm but not in the regex alternation — the arm is unreachable.
 
-- [ ] **Step 1: Update the "known bug" tests to reflect the corrected behavior**
+- [x] **Step 1: Update the "known bug" tests to reflect the corrected behavior**
 
 In `src/duration.rs` tests, change the two "known behavior" tests:
 
@@ -162,14 +162,14 @@ fn test_parse_duration_rejects_leading_junk() {
 }
 ```
 
-- [ ] **Step 2: Run tests — verify they fail**
+- [x] **Step 2: Run tests — verify they fail**
 
 ```bash
 cargo test test_parse_duration_ns test_parse_duration_rejects_leading_junk -- --nocapture
 ```
 Expected: both FAIL.
 
-- [ ] **Step 3: Fix the regex in `src/duration.rs:8`**
+- [x] **Step 3: Fix the regex in `src/duration.rs:8`**
 
 ```rust
 // Before:
@@ -179,14 +179,14 @@ let re = Regex::new(r"(\d+)(ms|s|m|h)?$").unwrap();
 let re = Regex::new(r"^(\d+)(ns|ms|s|m|h)?$").unwrap();
 ```
 
-- [ ] **Step 4: Run all tests**
+- [x] **Step 4: Run all tests**
 
 ```bash
 cargo test --verbose
 ```
 Expected: all pass. The old "known bug" tests are now gone; the new ones pass.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/duration.rs

@@ -5,7 +5,7 @@ use std::time::Duration;
 pub struct DurationError;
 
 pub fn parse_duration(s: &str) -> Result<Duration, DurationError> {
-    let re = Regex::new(r"(\d+)(ms|s|m|h)?$").unwrap();
+    let re = Regex::new(r"^(\d+)(ns|ms|s|m|h)?$").unwrap();
     match re.captures(s) {
         Some(caps) => {
             let value = caps.get(1).map_or("", |m| m.as_str());
@@ -70,26 +70,22 @@ mod tests {
     }
 
     #[test]
-    fn test_parse_duration_ns_not_supported() {
-        // Known bug: regex pattern does not include "ns" as a unit,
-        // so "100ns" is rejected even though the match arm exists.
-        assert_eq!(parse_duration("100ns"), Err(DurationError));
+    fn test_parse_duration_ns() {
+        assert_eq!(parse_duration("100ns"), Ok(Duration::from_nanos(100)));
+        assert_eq!(parse_duration("0ns"), Ok(Duration::from_nanos(0)));
     }
 
     #[test]
-    fn test_parse_duration_no_start_anchor() {
-        // Known behavior: regex lacks ^ anchor, so leading junk is accepted
-        // as long as the string ends with a valid pattern.
-        assert_eq!(parse_duration("abc123s"), Ok(Duration::from_secs(123)));
-        assert_eq!(parse_duration("xyz500ms"), Ok(Duration::from_millis(500)));
+    fn test_parse_duration_rejects_leading_junk() {
+        assert_eq!(parse_duration("abc123s"), Err(DurationError));
+        assert_eq!(parse_duration("xyz500ms"), Err(DurationError));
     }
 
     #[test]
     fn test_parse_duration_space_in_input() {
         // Space between number and unit breaks regex match
         assert_eq!(parse_duration("5 s"), Err(DurationError));
-        // Leading space still matches because regex has no ^ anchor
-        assert_eq!(parse_duration(" 5s"), Ok(Duration::from_secs(5)));
+        assert_eq!(parse_duration(" 5s"), Err(DurationError));
     }
 
     #[test]
