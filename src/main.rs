@@ -5,6 +5,11 @@ use duration::parse_duration;
 use time::parse_time;
 use std::time::Duration;
 
+fn is_time_format(s: &str) -> bool {
+    let parts: Vec<&str> = s.split(':').collect();
+    parts.len() == 3 && parts.iter().all(|p| p.chars().all(|c| c.is_ascii_digit()))
+}
+
 fn parse_args() -> Result<Duration, String> {
     let args: Vec<String> = std::env::args().collect();
 
@@ -13,7 +18,7 @@ fn parse_args() -> Result<Duration, String> {
     }
 
     let input = &args[1];
-    if input.contains(':') {
+    if is_time_format(input) {
         return parse_time(input);
     }
 
